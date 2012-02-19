@@ -65,6 +65,7 @@ written as follows:
         @http_response method="HEAD" url="/users/#{username}" status
             release
             event status != 200
+        http_request method="HEAD" url="/users/#{username}"
 
 The `@` symbol defines a subscriber for the named event. Any arguments
 that follow are qualifiers. Each statement that is not a subscription
