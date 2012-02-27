@@ -1,0 +1,4 @@
+// This is a comment, but only by convention.
+... Technically, publishing any event that does not have any subscribers is effectively a no-op.
+... A particular interpreter may choose to bypass the standard event publication flow for certain
+... events, though, for optimal performance.

@@ -1,0 +1,27 @@
+@ main
+
+  get "images/sprite.png"
+    @ got image
+
+      screen
+        @ position width height
+
+          = x width / 2
+          = y height / 2
+
+          @ move x y
+            draw image x y
+
+          @ keypress "Up"
+            move y=-1
+
+          @ keypress "Down"
+            move y=1
+
+          @ keypress "Left"
+            move x=-1
+
+          @ keypress "Right"
+            move x=1
+
+          move x y

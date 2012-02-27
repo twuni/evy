@@ -1,0 +1,2 @@
+lambda @ main
+  print "Hello, world!"

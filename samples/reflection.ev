@@ -1,0 +1,4 @@
+? main
+  @ each subscriber
+    print subscriber
+  

@@ -1,0 +1,2 @@
+subscribe main
+  publish print "Hello, world!"

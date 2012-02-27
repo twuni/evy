@@ -1,0 +1,11 @@
+@ fade it duration
+  = ms duration / 100
+  while ms > 0
+    @ do
+      wait ms
+        @ do
+          get it key="opacity"
+            @ got value
+              = value 1 - ( ms / ( duration / 100 ) )
+              set it key="opacity" value
+      = ms ms - 100

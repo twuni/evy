@@ -1,0 +1,6 @@
+@ authenticated credentials
+  @ update uri data
+    = statement "UPDATE resource SET data = ? WHERE id = ?"
+    & statement data uri
+    sql statement
+    purge uri

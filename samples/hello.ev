@@ -1,0 +1,4 @@
+// Subscribe to the 'main' event.
+@ main
+  // Publish the 'print' event with a single string argument.
+  print "Hello, world!"
