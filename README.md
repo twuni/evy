@@ -1,8 +1,10 @@
 # Introduction ###########################################################
 
-Evy is an event-oriented programming language. It is built on the paradigm
-of asynchronous application design, where components communicate with each
-other by publishing and subscribing to events.
+Evy is an event-oriented, dynamic, general purpose functional language. It
+is built on the paradigm of asynchronous application design, where
+components communicate with each other by publishing and subscribing to
+events. It bears a strong resemblance to Lisp in its prefix notation and
+its minimalistic grammar.
 
 # Background #############################################################
 
@@ -37,17 +39,24 @@ application. Evy is my attempt to prove this to be true.
 
 # Design ##############################################################
 
-Evy is built around a publisher/subscriber model with the following
-basic constructs:
+Evy has a very simple grammar:
 
- * `publish`: Any component may publish any number of events.
- * `subscribe`: Any component may subscribe to any number of events.
- * `event`: An event establishes a communications channel between a
-   publisher and a subscriber.
- * `reserve`: A subscriber may retain the event beyond its initial
-   scope by placing a reservation on the event.
- * `release`: When a subscriber is finished with an event on which
-   it has placed a reservation, it must release that reservation.
+    EVENT: IDENTIFIER (' ' CONTEXT)*;
+    CONTEXT: (IDENTIFIER '=')? (STRING|INT|FLOAT|BOOLEAN);
+    IDENTIFIER: ('!'|'#'..'&'|'('..'/'|':'..'~')('!'|'#'..'&'|'('..'~')*
+
+Every statement in Evy is an event. Identifiers can be virtually any
+printable character, with the following exceptions:
+
+ * An identifier may not begin with a number.
+ * An identifier may not contain a single-quote ('), a double-quote ("),
+   or whitespace.
+
+In practice, Evy follows a publisher/subscriber model. Two built-in
+functions facilitate this:
+
+ * The lambda function **publishes** a named event.
+ * The `@` function **subscribes to** a named event.
 
 The Evy language is ultimately broken down into scopes that communicate
 with each other via events. Reservations allow a scope to defer some
@@ -58,22 +67,16 @@ Interfaces are defined in Evy as sets of published events and sets of
 subscribed events. For example, a form validation program might be
 written as follows:
 
-    @validate_email email
-        event /.+@.+\..+/.test(email)
-    @validate_username username
-        reserve
-        @http_response method="HEAD" url="/users/#{username}" status
-            release
-            event status != 200
+    @ validate_email email
+        ? email ~= .+@.+\..+
+    @ validate_username username
         http_request method="HEAD" url="/users/#{username}"
-
-The `@` symbol defines a subscriber for the named event. Any arguments
-that follow are qualifiers. Each statement that is not a subscription
-must be a publication.
+          @ response status
+            ? status != 200
 
 Here is a "Hello, world!" example written in Evy.
 
-    @main
+    @ main
         print "Hello, world!"
 
 This program subscribes to the `main` event with no qualifiers, then
@@ -86,5 +89,4 @@ Any number of initial events can be published by specifying them as
 arguments on the command-line. For example, to run the `hello` event:
 
     $ ev hello
-
     
