@@ -224,6 +224,10 @@ var Evy = ( function() {
 
     } );
     
+    subscribe( "native", function() {
+      eval( arguments[0][0] );
+    } );
+    
     subscribe( "print", function() {
       console.log( arguments[0][0] );
     } );
