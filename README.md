@@ -1,10 +1,15 @@
 # Introduction ###########################################################
 
-Evy is an event-oriented, dynamic, general purpose functional language. It
-is built on the paradigm of asynchronous application design, where
-components communicate with each other by publishing and subscribing to
-events. It bears a strong resemblance to Lisp in its prefix notation and
-its minimalistic grammar.
+Evy is an interpreted, event-oriented, dynamic, general purpose functional
+language. It is built on the paradigm of asynchronous application design,
+where components communicate with each other by publishing and subscribing
+to events.
+
+# Examples ###############################################################
+
+A simple *Hello, world* program in Evy:
+
+    print "Hello, world!"
 
 # Background #############################################################
 
