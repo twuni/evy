@@ -200,14 +200,25 @@ var Evy = ( function() {
       var children = this.children;
       var event = arguments[0][0];
       
-      // console.log( "'@' event published for", event, "with the following contexts:", children );
+      A(children).each( function() {
+        var child = this;
+        subscribe( event, function() {
+          execute( child );
+          unsubscribe( event, arguments.callee );
+        } );
+      } );
 
-      subscribe( event, function() {
-        // console.log( event, "event published with the following execution context:", children );
-        A(children).each( function() {
-          // console.log( "Executing context:", this );
-          execute( this );
-          unsubscribe( event, this );
+    } );
+    
+    subscribe( "@@", function() {
+
+      var children = this.children;
+      var event = arguments[0][0];
+      
+      A(children).each( function() {
+        var child = this;
+        subscribe( event, function() {
+          execute( child );
         } );
       } );
 
