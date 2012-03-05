@@ -65,146 +65,163 @@ var Evy = ( function() {
   var Evy = F( function( program ) {
 
     var PUBLICATION = /^([^ ]+)(?: (.+))?$/gi;
+    
+    var parse = function( line, start, parameters ) {
 
-    return {
+      if( !line ) { line = ""; }
+      if( !start ) { start = 0; }
+      if( !parameters ) { parameters = []; }
 
-      tree: function() {
+      if( start >= line.length ) { return parameters; }
 
-        var root = {
-          depth: -1,
-          name: undefined,
-          children: []
-        };
+      var space  = line.indexOf( ' ', start );
+      var equals = line.indexOf( '=', start );
+      var quote  = line.indexOf( '"', start );
 
-        var ancestors = A([root]);
+      if( space < 0 ) { space = line.length; }
+      if( quote < 0 ) { quote = line.length + 1; }
+      if( equals < 0 ) { equals = line.length + 2; }
 
-        A( program.split("\n") ).each( function() {
+      var token  = line.substring( start, space );
 
-          var node = S(this).toNode();
-          var parent = ancestors.last();
+      if( quote < space ) {
+        var matchingQuote = line.indexOf( '"', quote + 1 );
+        token = line.substring( start, matchingQuote + 1 );
+      }
 
-          if( !node.name ) {
-          } else if( node.depth > parent.depth ) {
-            parent.children.push( node );
-            ancestors.push( node );
-          } else {
-            ancestors.pop();
-            arguments.callee.apply( this, arguments );
-          }
+      var end = start + token.length;
 
-        } );
+      var parameter = [];
 
-        return root;
+      if( equals < space ) {
+        parameter.push( line.substring( start, equals ) );
+        parameter.push( line.substring( equals + 1, end ) );
+      } else {
+        parameter.push( token );
+      }
 
-      },
+      for( var i = 0; i < parameter.length; i++ ) {
+        if( parameter[i].indexOf('"') > -1 ) {
+          parameter[i] = parameter[i].substring( 1, parameter[i].length - 1 );
+        }
+      }
 
-      execute: function( context ) {
+      parameters.push( parameter );
 
-        if( !context ) { context = this.tree(); }
+      return arguments.callee( line, end + 1, parameters );
 
-        if( context.name ) {
+    };
+    
+    var tree = function() {
 
-          var event = context.name.replace( PUBLICATION, "$1" );
-          var parameters = this.parse( context.name.replace( PUBLICATION, "$2" ) );
+      var root = {
+        depth: -1,
+        name: undefined,
+        children: []
+      };
 
-          this.publish( event, parameters, context );
+      var ancestors = A([root]);
 
+      A( program.split("\n") ).each( function() {
+
+        var node = S(this).toNode();
+        var parent = ancestors.last();
+
+        if( !node.name ) { return; }
+
+        if( node.depth > parent.depth ) {
+          parent.children.push( node );
+          ancestors.push( node );
         } else {
-
-          for( var i = 0; i < context.children.length; i++ ) {
-            arguments.callee.call( this, context.children[i] );
-          }
-
+          ancestors.pop();
+          arguments.callee.apply( this, arguments );
         }
 
-      },
+      } );
 
-      parse: function( line, start, parameters ) {
+      return root;
 
-        if( !line ) { line = ""; }
-        if( !start ) { start = 0; }
-        if( !parameters ) { parameters = []; }
+    };
+    
+    var execute = function( context ) {
 
-        if( start >= line.length ) { return parameters; }
+      if( !context ) { context = tree(); }
 
-        var space  = line.indexOf( ' ', start );
-        var equals = line.indexOf( '=', start );
-        var quote  = line.indexOf( '"', start );
+      if( context.name ) {
 
-        if( space < 0 ) { space = line.length; }
-        if( quote < 0 ) { quote = line.length + 1; }
-        if( equals < 0 ) { equals = line.length + 2; }
+        var event = context.name.replace( PUBLICATION, "$1" );
+        var parameters = parse( context.name.replace( PUBLICATION, "$2" ) );
 
-        var token  = line.substring( start, space );
+        publish( event, parameters, context );
 
-        if( quote < space ) {
-          var matchingQuote = line.indexOf( '"', quote + 1 );
-          token = line.substring( start, matchingQuote + 1 );
+      } else {
+
+        for( var i = 0; i < context.children.length; i++ ) {
+          execute( context.children[i] );
         }
-
-        var end = start + token.length;
-
-        var parameter = [];
-
-        if( equals < space ) {
-          parameter.push( line.substring( start, equals ) );
-          parameter.push( line.substring( equals + 1, end ) );
-        } else {
-          parameter.push( token );
-        }
-
-        for( var i = 0; i < parameter.length; i++ ) {
-          if( parameter[i].indexOf('"') > -1 ) {
-            parameter[i] = parameter[i].substring( 1, parameter[i].length - 1 );
-          }
-        }
-
-        parameters.push( parameter );
-
-        return arguments.callee( line, end + 1, parameters );
-
-      },
-
-      publish: function( event, parameters, context ) {
-
-        if( !context ) { context = {}; }
-
-        A( this.events[event] || [] ).each( function() {
-          this.behavior.apply( context, parameters );
-        } );
-
-      },
-
-      events: {},
-
-      subscribe: function( event, behavior, context ) {
-
-        if( !context ) { context = {}; }
-
-        var events = this.events[event] || [];
-
-        events.push( { context: context, behavior: behavior } );
-
-        this.events[event] = events;
-
-      },
-
-      unsubscribe: function( event, behavior, context ) {
-
-        if( !context ) { context = {}; }
-
-        var events = [];
-
-        A( this.events[event] || [] ).each( function() {
-          if( this.behavior !== behavior || this.context !== context ) {
-            events.push( this );
-          }
-        } );
-
-        this.events[event] = events;
 
       }
 
+    };
+    
+    var events = {};
+
+    var publish = function( event, parameters, context ) {
+      // console.log( "Publishing", event, "event with parameters", parameters, "and execution context", context );
+      if( !event ) { throw "Event name must be specified."; }
+      if( !parameters ) { parameters = []; }
+      if( !context ) { context = {}; }
+      A( events[event] || [] ).each( function() {
+        this.apply( context, parameters );
+      } );
+    };
+
+    var subscribe = function( event, behavior ) {
+      if( !event ) { throw "Event name must be specified."; }
+      if( !behavior ) { throw "Behavior must be a function."; }
+      if( !events[event] ) { events[event] = []; }
+      events[event].push( behavior );
+    };
+
+    var unsubscribe = function( event, behavior ) {
+      if( !event ) { throw "Event name must be specified."; }
+      if( !behavior ) { events[event] = []; return; }
+      var after = [];
+      A( events[event] || [] ).each( function() {
+        if( this !== behavior ) {
+          after.push( this );
+        }
+      } );
+      events[event] = after;
+    };
+
+    subscribe( "@", function() {
+
+      var children = this.children;
+      var event = arguments[0][0];
+      
+      // console.log( "'@' event published for", event, "with the following contexts:", children );
+
+      subscribe( event, function() {
+        // console.log( event, "event published with the following execution context:", children );
+        A(children).each( function() {
+          // console.log( "Executing context:", this );
+          execute( this );
+          unsubscribe( event, this );
+        } );
+      } );
+
+    } );
+    
+    subscribe( "print", function() {
+      console.log( arguments[0][0] );
+    } );
+
+    return {
+      execute: execute,
+      publish: publish,
+      subscribe: subscribe,
+      unsubscribe: unsubscribe
     };
 
   } ).cache();
