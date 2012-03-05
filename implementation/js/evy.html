@@ -1,10 +1,143 @@
 <!DOCTYPE html>
 <html lang="en_US">
+
   <head>
-    <title>Evy Interpreter</title>
+
+    <title>Evy Console</title>
+
+    <style>
+
+      h1 {
+        width: 90%;
+        margin: 0 auto 12px;
+        padding: 0 0 12px;
+        font: 24px Arial, Helvetica, sans-serif;
+        border-bottom: solid 1px #CCC;
+      }
+
+      label {
+        font: 14px Arial, Helvetica, sans-serif;
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        color: #8A8;
+      }
+
+      textarea, #output {
+        display: block;
+        padding: 1em;
+        margin: 0.5em auto;
+        width: 90%;
+        height: 10em;
+        box-sizing: border-box;
+        border-radius: 0.5em;
+        border: solid 1px #CCC;
+        font: 14px Consolas, monospace;
+      }
+
+      #source {
+        background-color: #FFF;
+        color: #036;
+        box-shadow: 0 0 3px rgba(0,32,64,0.25);
+      }
+
+      #output {
+        background-color: #DFD;
+        color: #030;
+        box-shadow: 0 0 3px rgba(0,64,32,0.25);
+      }
+      
+      button {
+
+        display: block;
+
+        width: 90%;
+        margin: 12px auto;
+        padding: 12px;
+        border: solid 1px #000;
+        border-radius: 6px;
+        font: 16px Arial, Helvetica, sans-serif;
+        text-shadow: 0 0 3px rgba(0,0,0,1);
+        color: #FFF;
+        cursor: pointer;
+
+        background: rgb(191,210,85);
+        background: -moz-linear-gradient(top,  rgba(191,210,85,1) 0%, rgba(142,185,42,1) 50%, rgba(114,170,0,1) 51%, rgba(158,203,45,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(191,210,85,1)), color-stop(50%,rgba(142,185,42,1)), color-stop(51%,rgba(114,170,0,1)), color-stop(100%,rgba(158,203,45,1)));
+        background: -webkit-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
+        background: -o-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
+        background: linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfd255', endColorstr='#9ecb2d',GradientType=0 );
+
+      }
+      
+      button:hover {
+        background: rgb(196,213,97);
+        background: -moz-linear-gradient(top,  rgba(196,213,97,1) 0%, rgba(155,202,46,1) 50%, rgba(129,194,0,1) 51%, rgba(167,211,55,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(196,213,97,1)), color-stop(50%,rgba(155,202,46,1)), color-stop(51%,rgba(129,194,0,1)), color-stop(100%,rgba(167,211,55,1)));
+        background: -webkit-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
+        background: -o-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
+        background: linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4d561', endColorstr='#a7d337',GradientType=0 );
+      }
+      
+      button:active {
+        background: rgb(210,234,76);
+        background: -moz-linear-gradient(top,  rgba(210,234,76,1) 0%, rgba(164,225,23,1) 50%, rgba(129,194,0,1) 51%, rgba(176,233,33,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(210,234,76,1)), color-stop(50%,rgba(164,225,23,1)), color-stop(51%,rgba(129,194,0,1)), color-stop(100%,rgba(176,233,33,1)));
+        background: -webkit-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
+        background: -o-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
+        background: linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ea4c', endColorstr='#b0e921',GradientType=0 );
+      }
+
+    </style>
+
   </head>
   <body>
-    <h1>Evy Interpreter</h1>
+
+    <h1>Evy Console</h1>
+
+    <form id="code" method="get" action="?">
+      <label for="source">Source</label>
+      <textarea id="source">print "Hello, world!"</textarea>
+      <button type="submit" id="run">Run</button>
+      <label for="output">Output</label>
+      <div id="output"></div>
+    </form>
+
     <script src="evy.js"></script>
+
+    <script>
+
+      document.getElementById("code").addEventListener( "submit", function( event ) {
+
+        event.preventDefault();
+
+        var source = document.getElementById("source").value;
+        var program = Evy( source );
+        var output = document.getElementById("output");
+
+        output.innerText = "";
+
+        program.unsubscribe( "print" );
+        program.subscribe( "print", function() {
+          output.innerText += arguments[0][0];
+        } );
+
+        program.execute();
+        
+        if( !output.innerText ) {
+          output.innerHTML = "<em style=\"opacity:0.5;\">No output</em>";
+        }
+
+      } );
+
+    </script>
+
   </body>
+
 </html>
