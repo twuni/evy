@@ -97,6 +97,14 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ea4c', endColorstr='#b0e921',GradientType=0 );
       }
       
+      #time-elapsed {
+        margin: 1em auto;
+        width: 90%;
+        font-size: 12px;
+        text-align: right;
+        opacity: 0.5;
+      }
+      
       .footer {
         margin: 1em auto;
         width: 90%;
@@ -120,6 +128,7 @@
       <button type="submit" id="run">Run</button>
       <label for="output">Output</label>
       <div id="output"></div>
+      <div id="time-elapsed"></div>
     </form>
     
     <div class="footer">
@@ -136,21 +145,24 @@
         event.preventDefault();
 
         var source = document.getElementById("source").value;
-        var program = Evy( source );
         var output = document.getElementById("output");
 
         output.innerText = "";
 
+        var before = new Date().getTime();
+        var program = Evy( source );
         program.unsubscribe( "print" );
         program.subscribe( "print", function() {
           output.innerText += arguments[0][0];
         } );
-
         program.execute();
+        var after = new Date().getTime();
         
         if( !output.innerText ) {
           output.innerHTML = "<em style=\"opacity:0.5;\">No output</em>";
         }
+        
+        document.getElementById("time-elapsed").innerText = "Executed in " + ( after - before ) + " ms."
 
       } );
 
