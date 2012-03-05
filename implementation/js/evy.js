@@ -195,7 +195,7 @@ var Evy = ( function() {
       events[event] = after;
     };
 
-    subscribe( "@", function() {
+    A( [ "@", "next", "once" ] ).each( function() { subscribe( this, function() {
 
       var children = this.children;
       var event = arguments[0][0];
@@ -208,9 +208,9 @@ var Evy = ( function() {
         } );
       } );
 
-    } );
+    } ); } );
     
-    subscribe( "@@", function() {
+    A( [ "@@", "every", "each" ] ).each( function() { subscribe( this, function() {
 
       var children = this.children;
       var event = arguments[0][0];
@@ -222,12 +222,12 @@ var Evy = ( function() {
         } );
       } );
 
-    } );
+    } ); } );
     
     subscribe( "native", function() {
       eval( arguments[0][0] );
     } );
-    
+
     subscribe( "print", function() {
       console.log( arguments[0][0] );
     } );
