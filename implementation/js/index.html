@@ -139,7 +139,7 @@
       <textarea id="source">print "Hello, world!"</textarea>
       <button type="submit" id="run">Run</button>
       <label for="output">Output</label>
-      <div id="output"></div>
+      <pre id="output"></pre>
       <div id="time-elapsed"></div>
     </form>
     
@@ -165,7 +165,7 @@
         var program = Evy( source );
         program.unsubscribe( "print" );
         program.subscribe( "print", function() {
-          output.innerText += arguments[0][0];
+          output.innerText += arguments[0][0] + "\n";
         } );
         program.execute();
         var after = new Date().getTime();
