@@ -1,3 +1,15 @@
+var Evy = function( program ) {
+  this.program = tree( program );
+};
+
+Evy.prototype = {
+  subscribe: function() {},
+  unsubscribe: function() {},
+  publish: function() {},
+  execute: function() {}
+};
+
+
 var Evy = ( function() {
 
   var Evy = cacheOf( function( program ) {
