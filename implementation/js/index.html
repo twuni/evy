@@ -4,131 +4,9 @@
   <head>
 
     <title>Evy Console</title>
-
-    <style>
     
-      body {
-        font: 14px Arial, Helvetica, sans-serif;
-      }
-
-      h1 {
-        width: 90%;
-        margin: 0 auto 12px;
-        padding: 0 0 12px;
-        font-size: 24px;
-        border-bottom: solid 1px #CCC;
-        position: relative;
-      }
-      
-      h1 .version {
-        position: absolute;
-        top: 0;
-        right: 0;
-        font-size: 12px;
-        opacity: 0.5;
-      }
-
-      label {
-        display: block;
-        width: 90%;
-        margin: 0 auto;
-        color: #8A8;
-      }
-
-      textarea, #output {
-        display: block;
-        padding: 1em;
-        margin: 0.5em auto;
-        width: 90%;
-        height: 10em;
-        box-sizing: border-box;
-        border-radius: 0.5em;
-        border: solid 1px #CCC;
-        font: 14px Consolas, monospace;
-      }
-
-      #source {
-        background-color: #FFF;
-        color: #036;
-        box-shadow: 0 0 3px rgba(0,32,64,0.25);
-      }
-
-      #output {
-        background-color: #DFD;
-        color: #030;
-        box-shadow: 0 0 3px rgba(0,64,32,0.25);
-      }
-      
-      #output em {
-        opacity: 0.5;
-      }
-      
-      button {
-
-        display: block;
-
-        width: 90%;
-        margin: 12px auto;
-        padding: 12px;
-        border: solid 1px #000;
-        border-radius: 6px;
-        font: 16px Arial, Helvetica, sans-serif;
-        text-shadow: 0 0 3px rgba(0,0,0,1);
-        color: #FFF;
-        cursor: pointer;
-
-        background: rgb(191,210,85);
-        background: -moz-linear-gradient(top,  rgba(191,210,85,1) 0%, rgba(142,185,42,1) 50%, rgba(114,170,0,1) 51%, rgba(158,203,45,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(191,210,85,1)), color-stop(50%,rgba(142,185,42,1)), color-stop(51%,rgba(114,170,0,1)), color-stop(100%,rgba(158,203,45,1)));
-        background: -webkit-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-        background: -o-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-        background: linear-gradient(top,  rgba(191,210,85,1) 0%,rgba(142,185,42,1) 50%,rgba(114,170,0,1) 51%,rgba(158,203,45,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfd255', endColorstr='#9ecb2d',GradientType=0 );
-
-      }
-      
-      button:hover {
-        background: rgb(196,213,97);
-        background: -moz-linear-gradient(top,  rgba(196,213,97,1) 0%, rgba(155,202,46,1) 50%, rgba(129,194,0,1) 51%, rgba(167,211,55,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(196,213,97,1)), color-stop(50%,rgba(155,202,46,1)), color-stop(51%,rgba(129,194,0,1)), color-stop(100%,rgba(167,211,55,1)));
-        background: -webkit-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
-        background: -o-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
-        background: linear-gradient(top,  rgba(196,213,97,1) 0%,rgba(155,202,46,1) 50%,rgba(129,194,0,1) 51%,rgba(167,211,55,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4d561', endColorstr='#a7d337',GradientType=0 );
-      }
-      
-      button:active {
-        background: rgb(210,234,76);
-        background: -moz-linear-gradient(top,  rgba(210,234,76,1) 0%, rgba(164,225,23,1) 50%, rgba(129,194,0,1) 51%, rgba(176,233,33,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(210,234,76,1)), color-stop(50%,rgba(164,225,23,1)), color-stop(51%,rgba(129,194,0,1)), color-stop(100%,rgba(176,233,33,1)));
-        background: -webkit-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
-        background: -o-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
-        background: linear-gradient(top,  rgba(210,234,76,1) 0%,rgba(164,225,23,1) 50%,rgba(129,194,0,1) 51%,rgba(176,233,33,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ea4c', endColorstr='#b0e921',GradientType=0 );
-      }
-      
-      #time-elapsed {
-        margin: 1em auto;
-        width: 90%;
-        font-size: 12px;
-        text-align: right;
-        opacity: 0.5;
-      }
-      
-      .footer {
-        margin: 1em auto;
-        width: 90%;
-        font-size: 12px;
-      }
-
-      a {
-        color: #393;
-      }
-
-    </style>
+    <link rel="stylesheet" href="css/structure.css"/>
+    <link rel="stylesheet" href="css/colors.css"/>
 
   </head>
   <body>
@@ -152,7 +30,15 @@
       <p>Evy is <a href="https://github.com/twuni/evy">open-source</a> software.</p>
     </div>
 
-    <script src="evy.js"></script>
+    <script src="js/function-cache.js"></script>
+    <script src="js/enumeration.js"></script>
+    <script src="js/logging.js"></script>
+    <script src="js/collections.js"></script>
+    <script src="js/statements.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/evy.js"></script>
+    <script src="js/events/all.js"></script>
 
     <script>
 
