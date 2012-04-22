@@ -1,6 +1,6 @@
 var toCollection = cacheOf( function( array ) {
   
-  array = Array.prototype.slice.call( array );
+  array = Array.prototype.slice.call( array || [] );
 
   return {
 

@@ -52,7 +52,7 @@
         output.innerText = "";
 
         var before = new Date().getTime();
-        var program = Evy( source );
+        var program = new Evy( source );
         program.unsubscribe( "print" );
         program.subscribe( "print", function() {
           output.innerText += arguments[0][0] + "\n";
