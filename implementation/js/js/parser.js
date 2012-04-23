@@ -32,11 +32,11 @@ var parse = function( line, start, parameters ) {
     parameter.push( token );
   }
 
-  for( var i = 0; i < parameter.length; i++ ) {
+  /*for( var i = 0; i < parameter.length; i++ ) {
     if( parameter[i].indexOf('"') > -1 ) {
       parameter[i] = parameter[i].substring( 1, parameter[i].length - 1 );
     }
-  }
+  }*/
 
   parameters.push( parameter );
 

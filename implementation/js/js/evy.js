@@ -61,6 +61,25 @@ Evy.prototype = {
   execute: ( function() {
   
     var PUBLICATION = /^([^ ]+)(?: (.+))?$/gi;
+    var IDENTIFIER = /^[^\d"\.\+\-'\s]/gi;
+
+    function isSymbol( value ) {
+      return !!( value || "" ).match( IDENTIFIER );
+    }
+
+    function expandSymbols( context, parameters ) {
+      for( var k = 0; k < parameters.length; k++ ) {
+        var parameter = parameters[k];
+        if( parameter.length == 2 ) {
+          var key = parameter[0];
+          var value = parameter[1];
+          console.log( "isSymbol?", value, isSymbol(value), context.lookup(value) );
+          context.symbols[key] = isSymbol(value) ? context.lookup(value) : value;
+        } else if( isSymbol(parameter[0]) ) {
+          parameter[1] = context.lookup(parameter[0]);
+        }
+      }
+    }
 
     return function( context ) {
   
@@ -72,6 +91,8 @@ Evy.prototype = {
 
         var event = context.name.replace( PUBLICATION, "$1" );
         var parameters = parse( context.name.replace( PUBLICATION, "$2" ) );
+
+        expandSymbols( context, parameters );
 
         this.publish( event, parameters, context );
 

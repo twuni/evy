@@ -7,13 +7,15 @@ function applyNativeSubscriptions( evy ) {
   }
 
   subscribeTo( [ "@", "next", "once" ], function() {
-
+  
     var children = this.children;
     var event = arguments[0][0];
+    var parameters = Array.prototype.slice.call( arguments, 1 );
     
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
+        child.setSymbols( parameters );
         evy.execute( child );
         evy.unsubscribe( event, arguments.callee );
       } );
@@ -25,10 +27,12 @@ function applyNativeSubscriptions( evy ) {
 
     var children = this.children;
     var event = arguments[0][0];
-  
+    var parameters = Array.prototype.slice.call( arguments, 1 );
+    
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
+        child.setSymbols( parameters );
         evy.execute( child );
       } );
     } );
