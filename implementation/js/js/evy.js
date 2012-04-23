@@ -1,11 +1,12 @@
-var LOG = new Log( "Evy", Log.Level.TRACE );
-var PUBLICATION = /^([^ ]+)(?: (.+))?$/gi;
-var $ = toCollection;
-
 var Evy = function( program ) {
 
-  this.root = tree( program );
-  this.events = {};
+  this.log = new Log( "Evy", Log.Level.TRACE );
+  this.log.trace( this, "[ctor](", program, ")" );
+
+  this.root = new Tree( program );
+  this.events = cloneOf( this.events );
+
+  applyNativeSubscriptions( this );
 
 };
 
@@ -15,7 +16,7 @@ Evy.prototype = {
 
   subscribe: function( event, behavior ) {
 
-    LOG.trace( this, "subscribe(", event, behavior, ")" );
+    this.log.trace( this, "subscribe(", event, behavior, ")" );
 
     if( !event ) { throw "Event name must be specified."; }
     if( !behavior ) { throw "Behavior must be a function."; }
@@ -27,13 +28,13 @@ Evy.prototype = {
 
   unsubscribe: function( event, behavior ) {
 
-    LOG.trace( this, "unsubscribe(", event, behavior, ")" );
+    this.log.trace( this, "unsubscribe(", event, behavior, ")" );
 
     if( !event ) { throw "Event name must be specified."; }
     if( !behavior ) { this.events[event] = []; return; }
 
     var after = [];
-    $( this.events[event] ).each( function() {
+    toCollection( this.events[event] ).each( function() {
       if( this !== behavior ) {
         after.push( this );
       }
@@ -45,37 +46,45 @@ Evy.prototype = {
 
   publish: function( event, parameters, context ) {
 
-    LOG.trace( this, "publish(", event, parameters, context, ")" );
+    this.log.trace( this, "publish(", event, parameters, context, ")" );
 
     if( !event ) { throw "Event name must be specified."; }
     if( !parameters ) { parameters = []; }
     if( !context ) { context = {}; }
 
-    $( this.events[event] ).each( function() {
+    toCollection( this.events[event] ).each( function() {
       this.apply( context, parameters );
     } );
 
   },
 
-  execute: function( context ) {
+  execute: ( function() {
+  
+    var PUBLICATION = /^([^ ]+)(?: (.+))?$/gi;
 
-    if( !context ) { context = this.root; }
+    return function( context ) {
+  
+      this.log.trace( this, "execute(", context, ")" );
 
-    if( context.name ) {
+      if( !context ) { context = this.root; }
 
-      var event = context.name.replace( PUBLICATION, "$1" );
-      var parameters = parse( context.name.replace( PUBLICATION, "$2" ) );
+      if( context.name ) {
 
-      this.publish( event, parameters, context );
+        var event = context.name.replace( PUBLICATION, "$1" );
+        var parameters = parse( context.name.replace( PUBLICATION, "$2" ) );
 
-    } else {
+        this.publish( event, parameters, context );
 
-      for( var i = 0; i < context.children.length; i++ ) {
-        this.execute( context.children[i] );
+      } else {
+
+        for( var i = 0; i < context.children.length; i++ ) {
+          this.execute( context.children[i] );
+        }
+
       }
 
-    }
+    };
 
-  }
+  } )()
 
 };

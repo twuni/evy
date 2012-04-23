@@ -30,6 +30,7 @@
       <p>Evy is <a href="https://github.com/twuni/evy">open-source</a> software.</p>
     </div>
 
+    <script src="js/clone.js"></script>
     <script src="js/cache.js"></script>
     <script src="js/enumeration.js"></script>
     <script src="js/logging.js"></script>
@@ -52,12 +53,13 @@
         output.innerText = "";
 
         var before = new Date().getTime();
-        var program = new Evy( source );
-        program.unsubscribe( "print" );
-        program.subscribe( "print", function() {
+
+        var evy = new Evy( source );
+        evy.unsubscribe( "print" );
+        evy.subscribe( "print", function() {
           output.innerText += arguments[0][0] + "\n";
         } );
-        program.execute();
+        evy.execute();
         var after = new Date().getTime();
         
         if( !output.innerText ) {

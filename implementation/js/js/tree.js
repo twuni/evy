@@ -1,18 +1,31 @@
-var tree = function( program ) {
+function Node( string ) {
 
-  var root = {
-    depth: -1,
-    name: undefined,
-    children: []
-  };
+  string = "" + string;
 
-  var ancestors = toCollection([root]);
+  this.name = string.replace( /^\s+/g, "" );
+  this.depth = string.length - this.name.length;
+  this.children = [];
+  this.symbols = {};
 
-  toCollection( program.split("\n") ).each( function() {
+};
 
-    var node = toStatement(this).toNode();
+function Tree( program ) {
+
+  this.name = undefined;
+  this.depth = -1;
+  this.children = [];
+  this.symbols = {};
+
+  var $ = toCollection;
+
+  var ancestors = $( [this] );
+  var lines = program.split("\n");
+  
+  $( lines ).each( function() {
+
+    var node = new Node(this);
     var parent = ancestors.last();
-
+    
     if( !node.name ) { return; }
 
     if( node.depth > parent.depth ) {
@@ -20,11 +33,9 @@ var tree = function( program ) {
       ancestors.push( node );
     } else {
       ancestors.pop();
-      arguments.callee.apply( this, arguments );
+      arguments.callee.call( this );
     }
 
   } );
-
-  return root;
 
 };

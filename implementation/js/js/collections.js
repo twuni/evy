@@ -1,4 +1,4 @@
-var toCollection = cacheOf( function( array ) {
+var toCollection = function( array ) {
   
   array = Array.prototype.slice.call( array || [] );
 
@@ -22,4 +22,4 @@ var toCollection = cacheOf( function( array ) {
 
   };
 
-} );
+};

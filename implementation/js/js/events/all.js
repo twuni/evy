@@ -1,8 +1,8 @@
-( function() {
+function applyNativeSubscriptions( evy ) {
 
   function subscribeTo( events, subscription ) {
     for( var i = 0; i < events.length; i++ ) {
-      Evy.prototype.subscribe( events[i], subscription );
+      evy.subscribe( events[i], subscription );
     }
   }
 
@@ -13,9 +13,9 @@
     
     toCollection(children).each( function() {
       var child = this;
-      Evy.prototype.subscribe( event, function() {
-        Evy.prototype.execute( child );
-        Evy.prototype.unsubscribe( event, arguments.callee );
+      evy.subscribe( event, function() {
+        evy.execute( child );
+        evy.unsubscribe( event, arguments.callee );
       } );
     } );
 
@@ -28,19 +28,19 @@
   
     toCollection(children).each( function() {
       var child = this;
-      Evy.prototype.subscribe( event, function() {
-        Evy.prototype.execute( child );
+      evy.subscribe( event, function() {
+        evy.execute( child );
       } );
     } );
 
   } );
 
-  Evy.prototype.subscribe( "native", function() {
+  evy.subscribe( "native", function() {
     eval( arguments[0][0] );
   } );
 
-  Evy.prototype.subscribe( "print", function() {
+  evy.subscribe( "print", function() {
     console.log( arguments[0][0] );
   } );
 
-} )();
+}

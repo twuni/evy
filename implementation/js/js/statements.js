@@ -1,20 +1,10 @@
-var toStatement = cacheOf( function( string ) {
+var Node = function( string ) {
+  string = "" + string;
+  this.name = string.replace( /^\s+/g, "" );
+  this.depth = string.length - node.name.length;
+};
 
-  return {
-
-    toNode: cacheOf( function() {
-
-      var node = {};
-
-      node.name = string.replace(/^\s+/g,"");
-      node.depth = string.length - node.name.length;
-      node.children = [];
-      node.symbols = {};
-
-      return node;
-
-    } )
-
-  };
-
-} );
+Node.prototype = {
+  children: [],
+  symbols: {}
+};
