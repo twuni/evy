@@ -15,7 +15,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
-        child.setSymbols( parameters );
+        child.setSymbols( arguments );
         evy.execute( child );
         evy.unsubscribe( event, arguments.callee );
       } );
@@ -32,7 +32,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
-        child.setSymbols( parameters );
+        child.setSymbols( arguments );
         evy.execute( child );
       } );
     } );
@@ -40,11 +40,11 @@ function applyNativeSubscriptions( evy ) {
   } );
 
   evy.subscribe( "native", function() {
-    eval( arguments[0][0] );
+    eval( arguments[0][arguments[0].length-1] );
   } );
 
   evy.subscribe( "print", function() {
-    console.log( arguments[0][0] );
+    console.log( arguments[0][arguments[0].length-1] );
   } );
 
 }
