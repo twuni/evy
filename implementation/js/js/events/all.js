@@ -6,6 +6,16 @@ function applyNativeSubscriptions( evy ) {
     }
   }
 
+  function matchParameters( a, b ) {
+    if( a.length < b.length ) { return false; }
+    for( var i = 0; i < b.length; i++ ) {
+      if( a[i][0] !== b[i][0] || ( b[i][1] && a[i][1] !== b[i][1] ) ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   subscribeTo( [ "@", "next", "once" ], function() {
   
     var children = this.children;
@@ -15,6 +25,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
+        if( !matchParameters( arguments, parameters ) ) { return; }
         child.setSymbols( arguments );
         evy.execute( child );
         evy.unsubscribe( event, arguments.callee );
@@ -32,6 +43,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
+        if( !matchParameters( arguments, parameters ) ) { return; }
         child.setSymbols( arguments );
         evy.execute( child );
       } );
