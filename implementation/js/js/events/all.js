@@ -44,7 +44,11 @@ function applyNativeSubscriptions( evy ) {
   } );
 
   evy.subscribe( "print", function() {
-    console.log( arguments[0][arguments[0].length-1] );
+    var message = [];
+    for( var i = 0; i < arguments.length; i++ ) {
+      message.push( eval(arguments[i][arguments[i].length-1]) );
+    }
+    console.log.apply( console, message );
   } );
 
 }
