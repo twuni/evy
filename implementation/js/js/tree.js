@@ -2,7 +2,7 @@ function Node( string ) {
 
   string = "" + string;
 
-  this.log = new Log( "Node " + string, Log.Level.TRACE );
+  this.log = new Log( "Node " + string, Log.Level.DEBUG );
   this.name = string.replace( /^\s+/g, "" );
   this.depth = string.length - this.name.length;
   this.children = [];
@@ -17,7 +17,7 @@ Node.prototype.lookup = function( key ) {
 Node.prototype.setSymbols = function( parameters ) {
   this.log.trace( "setSymbols(", parameters, ")" );
   for( var i = 0; i < parameters.length; i++ ) {
-    this.log.debug( " - Considering", parameters[i] );
+    this.log.trace( " - Considering", parameters[i] );
     if( parameters[i].length == 2 ) {
       this.symbols[parameters[i][0]] = parameters[i][1];
     }
