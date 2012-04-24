@@ -56,7 +56,7 @@
         var evy = new Evy( source );
         evy.unsubscribe( "print" );
         evy.subscribe( "print", function() {
-          output.innerText += arguments[0][0] + "\n";
+          output.innerText += arguments[0][arguments[0].length-1] + "\n";
         } );
         evy.execute();
         var after = new Date().getTime();
