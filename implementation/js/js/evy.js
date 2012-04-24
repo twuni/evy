@@ -1,6 +1,6 @@
 var Evy = function( program ) {
 
-  this.log = new Log( "Evy", Log.Level.TRACE );
+  this.log = new Log( "Evy", Log.Level.DEBUG );
   this.log.trace( this, "[ctor](", program, ")" );
 
   this.root = new Tree( program );
@@ -73,7 +73,6 @@ Evy.prototype = {
         if( parameter.length == 2 ) {
           var key = parameter[0];
           var value = parameter[1];
-          console.log( "isSymbol?", value, isSymbol(value), context.lookup(value) );
           context.symbols[key] = isSymbol(value) ? context.lookup(value) : value;
         } else if( isSymbol(parameter[0]) ) {
           parameter[1] = context.lookup(parameter[0]);
