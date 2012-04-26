@@ -74,10 +74,10 @@ Evy.prototype = {
           var key = parameter[0];
           var value = parameter[1];
           context.symbols[key] = isSymbol(value) ? context.lookup(value) : eval(value);
-        } else if( isSymbol(key) ) {
-          parameter[1] = context.lookup(key);
+        } else if( isSymbol(parameter[0]) ) {
+          parameter[1] = context.lookup(parameter[0]);
         } else {
-          parameter[0] = eval(key);
+          parameter[0] = eval(parameter[0]);
         }
       }
     }
