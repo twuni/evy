@@ -22,7 +22,7 @@ function applyNativeSubscriptions( evy ) {
     }
     for( var i = 0; i < subscribedParameters.length; i++ ) {
       var publishedParameterValue = getNamedParameter( publishedParameters, subscribedParameters[i][0] );
-      var subscribedParameterValue = subscribedParameters[i][subscribedParameters[i].length-1];
+      var subscribedParameterValue = eval(subscribedParameters[i][subscribedParameters[i].length-1]);
       if( publishedParameterValue !== undefined && subscribedParameterValue !== undefined && publishedParameterValue !== subscribedParameterValue ) {
         return false;
       }

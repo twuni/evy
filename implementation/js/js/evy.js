@@ -70,14 +70,14 @@ Evy.prototype = {
     function expandSymbols( context, parameters ) {
       for( var k = 0; k < parameters.length; k++ ) {
         var parameter = parameters[k];
-        if( parameter.length == 2 ) {
+        if( parameter.length == 2 && parameter[1] !== undefined ) {
           var key = parameter[0];
           var value = parameter[1];
           context.symbols[key] = isSymbol(value) ? context.lookup(value) : eval(value);
-        } else if( isSymbol(parameter[0]) ) {
-          parameter[1] = context.lookup(parameter[0]);
+        } else if( isSymbol(key) ) {
+          parameter[1] = context.lookup(key);
         } else {
-          parameter[0] = eval(parameter[0]);
+          parameter[0] = eval(key);
         }
       }
     }
