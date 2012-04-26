@@ -65,10 +65,6 @@
         evy.execute();
         var after = new Date().getTime();
         
-        if( !output.innerText ) {
-          output.innerHTML = "<em>No output</em>";
-        }
-        
         document.getElementById("time-elapsed").innerText = "Executed in " + ( after - before ) + " ms."
 
       } );
