@@ -21,7 +21,12 @@ function applyNativeSubscriptions( evy ) {
       return false;
     }
     for( var i = 0; i < subscribedParameters.length; i++ ) {
-      if( getNamedParameter( publishedParameters, subscribedParameters[i][0] ) !== subscribedParameters[i][1] ) {
+      var publishedParameterValue = getNamedParameter( publishedParameters, subscribedParameters[i][0] );
+      var subscribedParameterValue = subscribedParameters[i][subscribedParameters[i].length-1];
+      if( publishedParameterValue !== undefined && subscribedParameterValue !== undefined && publishedParameterValue !== subscribedParameterValue ) {
+        return false;
+      }
+      if( publishedParameterValue === undefined && subscribedParameterValue !== undefined ) {
         return false;
       }
     }
