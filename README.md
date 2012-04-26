@@ -32,6 +32,13 @@ A familiar scene:
     ask question="What is your quest?"
     ask question="What is your favorite color?"
 
+Using the HTTP API:
+
+    @ http_response
+      print method url status body
+  
+    http_request "/foo"
+
 # Background #############################################################
 
 Programming UI for desktop, mobile, and web applications involves a great
