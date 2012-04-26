@@ -63,10 +63,23 @@ function applyNativeSubscriptions( evy ) {
     console.log.apply( console, message );
   } );
   
+  function getNamedParameter( parameters, name, defaultValue ) {
+    for( var i = 0; i < parameters.length; i++ ) {
+      var parameter = parameters[i];
+      if( parameter.length == 2 && parameter[0] === name ) {
+        return eval(parameter[1]);
+      }
+    }
+    return defaultValue;
+  }
+
   evy.subscribe( "http_request", function( url ) {
+
     var context = this;
-    var method = eval(arguments[0][arguments[1].length-1]);
-    var url = eval(arguments[1][arguments[0].length-1]);
+
+    var method = getNamedParameter( arguments, "method", "GET" );
+    var url = getNamedParameter( arguments, "url", arguments[0][0] );
+
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if( request.readyState == 4 ) {
@@ -75,6 +88,7 @@ function applyNativeSubscriptions( evy ) {
     };
     request.open( method, url, true );
     request.send( null );
+
   } );
 
 }
