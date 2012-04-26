@@ -62,5 +62,18 @@ function applyNativeSubscriptions( evy ) {
     }
     console.log.apply( console, message );
   } );
+  
+  evy.subscribe( "GET", function( url ) {
+    var context = this;
+    var url = eval(arguments[0][arguments[0].length-1]);
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if( request.readyState == 4 ) {
+        evy.publish( "GET->" + request.status, [ [ "url", url ], [ "body", request.responseText ] ], context );
+      }
+    };
+    request.open( "GET", url, true );
+    request.send( null );
+  } );
 
 }
