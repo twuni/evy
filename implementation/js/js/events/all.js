@@ -6,10 +6,22 @@ function applyNativeSubscriptions( evy ) {
     }
   }
 
-  function matchParameters( a, b ) {
-    if( a.length < b.length ) { return false; }
-    for( var i = 0; i < b.length; i++ ) {
-      if( a[i][0] !== b[i][0] || ( b[i][1] && a[i][1] !== b[i][1] ) ) {
+  function getNamedParameter( parameters, name, defaultValue ) {
+    for( var i = 0; i < parameters.length; i++ ) {
+      var parameter = parameters[i];
+      if( parameter.length === 2 && parameter[0] === name ) {
+        return eval(parameter[1]);
+      }
+    }
+    return defaultValue;
+  }
+
+  function isSubscribedTo( publishedParameters, subscribedParameters ) {
+    if( publishedParameters.length < subscribedParameters.length ) {
+      return false;
+    }
+    for( var i = 0; i < subscribedParameters.length; i++ ) {
+      if( getNamedParameter( publishedParameters, subscribedParameters[i][0] ) !== subscribedParameters[i][1] ) {
         return false;
       }
     }
@@ -25,7 +37,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
-        if( !matchParameters( arguments, parameters ) ) { return; }
+        if( !isSubscribedTo( arguments, parameters ) ) { return; }
         child.setSymbols( arguments );
         evy.execute( child );
         evy.unsubscribe( event, arguments.callee );
@@ -43,7 +55,7 @@ function applyNativeSubscriptions( evy ) {
     toCollection(children).each( function() {
       var child = this;
       evy.subscribe( event, function() {
-        if( !matchParameters( arguments, parameters ) ) { return; }
+        if( !isSubscribedTo( arguments, parameters ) ) { return; }
         child.setSymbols( arguments );
         evy.execute( child );
       } );
@@ -63,16 +75,6 @@ function applyNativeSubscriptions( evy ) {
     console.log.apply( console, message );
   } );
   
-  function getNamedParameter( parameters, name, defaultValue ) {
-    for( var i = 0; i < parameters.length; i++ ) {
-      var parameter = parameters[i];
-      if( parameter.length == 2 && parameter[0] === name ) {
-        return eval(parameter[1]);
-      }
-    }
-    return defaultValue;
-  }
-
   evy.subscribe( "http_request", function( url ) {
 
     var context = this;
