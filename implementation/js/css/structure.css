@@ -30,7 +30,7 @@ textarea, #output {
   padding: 1em;
   margin: 0.5em auto;
   width: 90%;
-  height: 10em;
+  min-height: 10em;
   box-sizing: border-box;
   border-radius: 0.5em;
   border-style: solid;
