@@ -11,6 +11,27 @@ A simple *Hello, world* program in Evy:
 
     print "Hello, world!"
 
+A familiar scene:
+
+    @@ ask question
+      @ reply question answer
+        print ">" answer
+      broadcast question
+      
+    @@ broadcast question
+      print question
+    
+    @ broadcast question="What is your name?"
+      reply question answer="My name is Sir Launcelot of Camelot."
+    @ broadcast question="What is your quest?"
+      reply question answer="To seek the Holy Grail."
+    @ broadcast question="What is your favorite color?"
+      reply question answer="Blue."
+    
+    ask question="What is your name?"
+    ask question="What is your quest?"
+    ask question="What is your favorite color?"
+
 # Background #############################################################
 
 Programming UI for desktop, mobile, and web applications involves a great
