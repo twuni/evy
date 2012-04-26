@@ -61,7 +61,7 @@ Evy.prototype = {
   execute: ( function() {
   
     var PUBLICATION = /^([^ ]+)(?: (.+))?$/gi;
-    var IDENTIFIER = /^[^\d"\.\+\-'\s]/gi;
+    var IDENTIFIER = /^[^\d"\.\+\-'\s][^"\.\+\-'\s]*/gi;
 
     function isSymbol( value ) {
       return !!( value || "" ).match( IDENTIFIER );
@@ -73,9 +73,11 @@ Evy.prototype = {
         if( parameter.length == 2 ) {
           var key = parameter[0];
           var value = parameter[1];
-          context.symbols[key] = isSymbol(value) ? context.lookup(value) : value;
+          context.symbols[key] = isSymbol(value) ? context.lookup(value) : eval(value);
         } else if( isSymbol(parameter[0]) ) {
           parameter[1] = context.lookup(parameter[0]);
+        } else {
+          parameter[0] = eval(parameter[0]);
         }
       }
     }

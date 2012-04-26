@@ -58,21 +58,22 @@ function applyNativeSubscriptions( evy ) {
   evy.subscribe( "print", function() {
     var message = [];
     for( var i = 0; i < arguments.length; i++ ) {
-      message.push( eval(arguments[i][arguments[i].length-1]) );
+      message.push( arguments[i][arguments[i].length-1] );
     }
     console.log.apply( console, message );
   } );
   
-  evy.subscribe( "GET", function( url ) {
+  evy.subscribe( "http_request", function( url ) {
     var context = this;
-    var url = eval(arguments[0][arguments[0].length-1]);
+    var method = eval(arguments[0][arguments[1].length-1]);
+    var url = eval(arguments[1][arguments[0].length-1]);
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if( request.readyState == 4 ) {
-        evy.publish( "GET->" + request.status, [ [ "url", url ], [ "body", request.responseText ] ], context );
+        evy.publish( "http_response", [ [ "method", method ], [ "url", url ], [ "status", request.status ], [ "body", request.responseText ] ], context );
       }
     };
-    request.open( "GET", url, true );
+    request.open( method, url, true );
     request.send( null );
   } );
 
