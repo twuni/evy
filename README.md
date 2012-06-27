@@ -27,6 +27,8 @@ A familiar scene:
       reply question answer="To seek the Holy Grail."
     @ broadcast question="What is your favorite color?"
       reply question answer="Blue."
+      reply question answer="Yellow."
+      reply question answer="AAUUUGGGGGHH!"
     
     ask question="What is your name?"
     ask question="What is your quest?"
